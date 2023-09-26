@@ -34,6 +34,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   return json({ env, session }, { headers: response.headers });
 }
+
 export default function App() {
   const { env, session } = useLoaderData<typeof loader>();
   const revalidator = useRevalidator();
@@ -62,7 +63,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Outlet context={{ supabase, session }} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
