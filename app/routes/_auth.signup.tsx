@@ -18,10 +18,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const confirmPassword = formData.get("confirm-password");
 
   if (email && password && password === confirmPassword) {
-    await supabase.auth.signUp({
+    const result = await supabase.auth.signUp({
       email,
       password,
     });
+
+    // TODO UI feedback
   }
 
   return redirect("/");

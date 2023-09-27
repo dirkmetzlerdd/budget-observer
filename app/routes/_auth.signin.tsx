@@ -13,7 +13,8 @@ export const action = async () => {
 
 export default function Signin() {
   const [errorText, setErrorText] = useState("");
-  const { supabase } = useOutletContext<OutletContext>();
+  const outletContext = useOutletContext<OutletContext>();
+
   const submit = useSubmit();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -22,8 +23,12 @@ export default function Signin() {
     (async function () {
       event.preventDefault();
 
-      if (emailRef.current?.value && passwordRef.current?.value) {
-        const data = await supabase.auth.signInWithPassword({
+      if (
+        emailRef.current?.value &&
+        passwordRef.current?.value &&
+        outletContext
+      ) {
+        const data = await outletContext?.supabase?.auth?.signInWithPassword({
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
         });
