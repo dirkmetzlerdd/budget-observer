@@ -28,7 +28,7 @@ export default function Signin() {
           password: passwordRef.current?.value,
         });
 
-        console.log(data)
+        console.log(data);
         if (!data.error) {
           submit(null, { method: "post" });
         } else {

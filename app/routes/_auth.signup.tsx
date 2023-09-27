@@ -2,7 +2,7 @@ import { Button } from "app/@/components/ui/button";
 import { Input } from "app/@/components/ui/input";
 import { Label } from "app/@/components/ui/label";
 import { Form, Link } from "@remix-run/react";
-import {  ActionFunctionArgs, redirect } from "@remix-run/node";
+import { ActionFunctionArgs, redirect } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -17,8 +17,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirm-password");
 
-  console.log(email, firstName)
-  
   if (email && password && password === confirmPassword) {
     await supabase.auth.signUp({
       email,
