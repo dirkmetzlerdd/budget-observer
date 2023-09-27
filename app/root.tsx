@@ -1,5 +1,9 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { json, type LinksFunction, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -14,6 +18,7 @@ import "./globals.css";
 import { createSupabaseServerClient } from "./@/lib/supabase.server";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@supabase/auth-helpers-remix";
+import MainHeader from "./@/components/mainHeader";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -62,7 +67,12 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="w-full h-screen p-0 m-0">
+        <MainHeader
+          // @ts-ignore
+          session={session}
+          signOut={() => supabase.auth.signOut()}
+        />
         <Outlet context={{ supabase, session }} />
         <ScrollRestoration />
         <Scripts />
