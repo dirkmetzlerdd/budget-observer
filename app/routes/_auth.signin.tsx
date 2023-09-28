@@ -16,13 +16,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   } = await supabase.auth.getSession();
 
   if (session?.user) {
-    return redirect("/")
+    return redirect("/");
   }
 
-  return json(
-    { user: session?.user },
-    { headers: response.headers },
-  );
+  return json({ user: session?.user }, { headers: response.headers });
 }
 
 export const action = async () => {
@@ -51,7 +48,6 @@ export default function Signin() {
           password: passwordRef.current?.value,
         });
 
-        console.log(data);
         if (!data.error) {
           submit(null, { method: "post" });
         } else {
