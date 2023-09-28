@@ -11,7 +11,6 @@ export default function MainHeader({
 }) {
   const matches = useMatches();
 
-  console.log(session);
   return (
     <header className="rounded-md flex justify-between items-center bg-slate-50 px-4">
       <Link
