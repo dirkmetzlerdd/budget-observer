@@ -35,7 +35,7 @@ function extractTransactions(arr: Array<string>): Array<string> {
     }
   }
 
-  return []
+  return [];
 }
 
 export async function parseCSVFile(pathX: string) {
@@ -52,9 +52,8 @@ export async function parseCSVFile(pathX: string) {
       };
     });
 
-  return transactions
+  return transactions;
 }
-
 
 // save transactions to DB
 // remove file

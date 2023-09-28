@@ -50,7 +50,9 @@ export default function Index() {
             <Label htmlFor="budgetFile">File:</Label>
             <Input id="budgetFile" type="file" name="upload" />
           </div>
-          <Button className="mt-2" type="submit">Upload</Button>
+          <Button className="mt-2" type="submit">
+            Upload
+          </Button>
         </Form>
         <Outlet />
       </div>
