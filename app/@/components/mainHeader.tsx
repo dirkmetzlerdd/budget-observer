@@ -15,10 +15,10 @@ export default function MainHeader({
     <header className="rounded-md flex justify-between items-center bg-slate-50 px-4">
       <Link
         to="/"
-        className="font-bold m-2 p-2 pl-3 pr-3 flex items-center bg-[#9fd3c7] rounded-md text-[#142d4c]"
+        className="font-bold m-2 ml-0 p-2 pl-3 pr-3 flex items-center bg-[#9fd3c7] rounded-md text-[#142d4c]"
       >
         <Receipt className="mr-2 h-8 w-8 hover:scale-110 transition-all duration-200" />{" "}
-        T.O.
+        b.obs
       </Link>
       <section className="flex gap-5 items-center"></section>
       <span className="flex justify-center">

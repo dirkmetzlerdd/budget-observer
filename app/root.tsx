@@ -73,7 +73,9 @@ export default function App() {
           session={session}
           signOut={() => supabase.auth.signOut()}
         />
-        <Outlet context={{ supabase, session }} />
+        <div className="">
+          <Outlet context={{ supabase, session }} />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
