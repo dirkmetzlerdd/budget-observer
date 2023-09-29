@@ -8,14 +8,14 @@ import {
 } from "@remix-run/node";
 import { parseCSVFile } from "~/@/lib/csvParser.server";
 import path from "path";
-import { fileURLToPath } from "url";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
+  path.join(process.cwd(), "/tmpUploads");
+
+  console.log(path);
 
   const fileUploadHandler = unstable_createFileUploadHandler({
-    directory: `${__dirname}/tmpUploads`,
+    directory: `./tmpUploads`,
     file: ({ filename }) => filename,
   });
 
@@ -26,9 +26,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const uploadedFile = formData.get("upload");
 
   // @ts-ignore
-  console.log("FILEPATH:", uploadedFile?.filepath);
-  console.log(`DIRNAME: ${__dirname}`);
+  // console.log("FILEPATH:", uploadedFile?.filepath);
+  // console.log(`DIRNAME: ${__dirname}`);
 
+  // path.join(process.cwd(), 'posts');
   // @ts-ignore
   const res = await parseCSVFile(uploadedFile?.filepath);
   console.log(res);
