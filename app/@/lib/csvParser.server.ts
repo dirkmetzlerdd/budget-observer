@@ -1,7 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 
-async function getCsvAsArray(path: string) {
+export async function getCsvAsArray(path: string) {
   let arr: Array<string> = [];
 
   await new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ async function getCsvAsArray(path: string) {
   return arr;
 }
 
-function extractTransactions(arr: Array<string>): Array<string> {
+export function extractTransactions(arr: Array<string>): Array<string> {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].includes("Buchung;")) {
       return arr.slice(i + 1);
@@ -45,9 +45,12 @@ export async function parseCSVFile(path: string) {
         recipient: line[2],
         bookingType: line[3],
         usage: line[4],
-        amount: parseFloat(line[5]),
+        amount: line[5],
       };
     });
 
   return transactions;
 }
+
+// chose currency format
+// remove saved file

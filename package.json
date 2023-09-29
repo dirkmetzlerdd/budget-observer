@@ -9,7 +9,8 @@
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc",
     "prettier": "npx prettier . --write",
-    "prettier-check": "npx prettier . --check"
+    "prettier-check": "npx prettier . --check",
+    "test": "vitest"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",

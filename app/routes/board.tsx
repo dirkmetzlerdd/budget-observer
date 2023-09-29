@@ -19,11 +19,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     fileUploadHandler,
   );
   const uploadedFile = formData.get("upload");
+
+  // @ts-ignore
   console.log(uploadedFile?.filepath);
 
   // @ts-ignore
   console.log(await parseCSVFile(uploadedFile?.filepath));
-  return redirect("/");
+  return redirect("/board/charts");
 };
 
 export default function Board() {
