@@ -7,13 +7,18 @@ import {
   redirect,
 } from "@remix-run/node";
 import { parseCSVFile } from "~/@/lib/csvParser.server";
-
-export const fileUploadHandler = unstable_createFileUploadHandler({
-  directory: "./tmpUploads",
-  file: ({ filename }) => filename,
-});
+import path from "path";
+import { fileURLToPath } from "url";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
+  const fileUploadHandler = unstable_createFileUploadHandler({
+    directory: `${__dirname}/tmpUploads`,
+    file: ({ filename }) => filename,
+  });
+
   const formData = await unstable_parseMultipartFormData(
     request,
     fileUploadHandler,
@@ -21,10 +26,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const uploadedFile = formData.get("upload");
 
   // @ts-ignore
-  console.log(uploadedFile?.filepath);
+  console.log("FILEPATH:", uploadedFile?.filepath);
+  console.log(`DIRNAME: ${__dirname}`);
 
   // @ts-ignore
-  console.log(await parseCSVFile(uploadedFile?.filepath));
+  const res = await parseCSVFile(uploadedFile?.filepath);
+  console.log(res);
   return redirect("/board/charts");
 };
 
