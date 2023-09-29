@@ -3,7 +3,7 @@ import {
   extractTransactions,
   getCsvAsArray,
   parseCSVFile,
-} from "../app/@/lib/csvParser.server";
+} from "../app/@/lib/csvParser";
 
 test("should return an array of strings from a csv file", async () => {
   const arr = await getCsvAsArray(`${__dirname}/mockFiles/umsatzING.csv`);
