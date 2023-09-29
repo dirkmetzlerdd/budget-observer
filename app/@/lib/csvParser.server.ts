@@ -1,10 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 
-const path =
-  "/Users/dm/Dev/budget-observer/tmpUploads/umsatz-1695920269111.csv";
-
-async function getCsvAsArray() {
+async function getCsvAsArray(path: string) {
   let arr: Array<string> = [];
 
   await new Promise((resolve, reject) => {
@@ -38,8 +35,8 @@ function extractTransactions(arr: Array<string>): Array<string> {
   return [];
 }
 
-export async function parseCSVFile(pathX: string) {
-  const arr = await getCsvAsArray();
+export async function parseCSVFile(path: string) {
+  const arr = await getCsvAsArray(path);
   const transactions = extractTransactions(arr)
     .map((line) => line.split(";"))
     .map((line) => {
@@ -54,8 +51,3 @@ export async function parseCSVFile(pathX: string) {
 
   return transactions;
 }
-
-// save transactions to DB
-// remove file
-
-// remove IMPORT
