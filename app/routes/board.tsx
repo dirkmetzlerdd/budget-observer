@@ -19,6 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     fileUploadHandler,
   );
   const uploadedFile = formData.get("upload");
+  console.log(uploadedFile?.filepath);
 
   // @ts-ignore
   console.log(await parseCSVFile(uploadedFile?.filepath));
