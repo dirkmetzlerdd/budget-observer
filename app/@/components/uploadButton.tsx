@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 export function CsvUploadButton() {
   return (
     <div className="bg-sltae-300">
-      <Form method="post" encType="multipart/form-data">
+      <Form method="post" action="/board" encType="multipart/form-data">
         <div className="max-w-md">
           <Label htmlFor="budgetFile">File:</Label>
           <Input
