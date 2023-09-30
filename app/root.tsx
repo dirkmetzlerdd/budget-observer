@@ -67,13 +67,13 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-screen p-0 m-0 bg-red-50">
+      <body className="min-h-screen p-0 m-0">
         <MainHeader
           // @ts-ignore
           session={session}
           signOut={() => supabase.auth.signOut()}
         />
-        <div className="h-full bg-blue-50">
+        <div className="h-full">
           <Outlet context={{ supabase, session }} />
         </div>
         <ScrollRestoration />

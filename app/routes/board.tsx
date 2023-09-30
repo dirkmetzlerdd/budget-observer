@@ -6,7 +6,7 @@ export default function Board() {
   const outletContext = useOutletContext<OutletContext>();
 
   return (
-    <div className="flex h-full bg-yellow-50">
+    <div className="flex h-full">
       <SideMenu />
       <div className="m-6">
         <Outlet context={outletContext} />
