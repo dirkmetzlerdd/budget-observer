@@ -19,7 +19,7 @@ const navItems = [
     icon: ArrowRightLeft,
   },
   {
-    linkTo: "purchaisegroup",
+    linkTo: "purchasegroup",
     label: "Groups",
     icon: ShoppingCart,
   },
