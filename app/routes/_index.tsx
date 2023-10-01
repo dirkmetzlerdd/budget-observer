@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import { type MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -10,10 +10,11 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <div className="bg-sltae-300">
-        <Outlet />
-      </div>
+    <div
+      style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
+      className="flex"
+    >
+      NOTHING
     </div>
   );
 }

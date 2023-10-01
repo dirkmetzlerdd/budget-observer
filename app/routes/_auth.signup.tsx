@@ -2,8 +2,17 @@ import { Button } from "app/@/components/ui/button";
 import { Input } from "app/@/components/ui/input";
 import { Label } from "app/@/components/ui/label";
 import { Form, Link, useActionData } from "@remix-run/react";
-import { ActionFunctionArgs, redirect, json } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  return json({});
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const response = new Response();

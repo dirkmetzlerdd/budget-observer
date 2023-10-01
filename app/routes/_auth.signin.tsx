@@ -2,10 +2,25 @@ import { Button } from "app/@/components/ui/button";
 import { Input } from "app/@/components/ui/input";
 import { Label } from "app/@/components/ui/label";
 import { Link, Form, useOutletContext, useSubmit } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { useRef, useState } from "react";
-import { Terminal } from "lucide-react";
 import { OutletContext } from "~/types/main";
+import { createSupabaseServerClient } from "~/@/lib/supabase.server";
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const response = new Response();
+  const supabase = createSupabaseServerClient({ request, response });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session?.user) {
+    return redirect("/");
+  }
+
+  return json({ user: session?.user }, { headers: response.headers });
+}
 
 export const action = async () => {
   return redirect("/");
@@ -33,7 +48,6 @@ export default function Signin() {
           password: passwordRef.current?.value,
         });
 
-        console.log(data);
         if (!data.error) {
           submit(null, { method: "post" });
         } else {
