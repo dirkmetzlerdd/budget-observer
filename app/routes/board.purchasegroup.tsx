@@ -1,12 +1,35 @@
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
+import { useActionData, useLoaderData } from "@remix-run/react";
 import CreateNewPurchaseGroup from "~/@/components/createNewPurchaseGroup";
+import PurchaseGroupsTable from "~/@/components/purchaseGroupsTable";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const response = new Response();
+  const supabase = createSupabaseServerClient({ request, response });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session?.user.id) {
+    return redirect("/");
+  }
+
+  const { data } = await supabase.from("purchaseGroup").select();
+
+  return json({ groups: data });
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
 
+  console.log(request);
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -46,11 +69,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Purchasegroup() {
   const data = useActionData<typeof action>();
+  const { groups } = useLoaderData<typeof loader>();
 
-  console.log(data);
+  console.log(groups);
   return (
-    <div className="flex">
+    <div className="flex flex-col">
+      <h1 className="mb-4 text-md font-bold">My Purchase Groups</h1>
       <CreateNewPurchaseGroup />
+      <PurchaseGroupsTable data={groups} />
     </div>
   );
 }

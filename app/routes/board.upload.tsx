@@ -13,7 +13,7 @@ export default function Upload() {
   const outletContext = useOutletContext<OutletContext>();
 
   return (
-    <div>
+    <div className="">
       <CsvUpload outletContext={outletContext} />
     </div>
   );

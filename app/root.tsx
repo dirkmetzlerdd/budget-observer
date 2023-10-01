@@ -73,7 +73,7 @@ export default function App() {
           session={session}
           signOut={() => supabase.auth.signOut()}
         />
-        <div className="min-h-full ">
+        <div className="min-h-full">
           <Outlet context={{ supabase, session }} />
         </div>
         <ScrollRestoration />

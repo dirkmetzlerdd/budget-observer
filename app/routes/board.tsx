@@ -8,7 +8,7 @@ export default function Board() {
   return (
     <div className="flex h-full">
       <SideMenu />
-      <div className="w-full">
+      <div className="w-full p-4">
         <Outlet context={outletContext} />
       </div>
     </div>

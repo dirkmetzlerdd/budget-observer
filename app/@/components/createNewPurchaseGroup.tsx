@@ -12,44 +12,46 @@ import {
   DialogTrigger,
 } from "app/@/components/ui/dialog";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 
 export default function CreateNewPurchaseGroup() {
+  const [isOpen, toggleIsOpen] = useState(false);
+
   return (
-    <section className="p-4">
-      <Dialog>
+    <section>
+      <Dialog open={isOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => toggleIsOpen(!isOpen)}>
             <Plus className="mr-3" />
             new purchase group
           </Button>
         </DialogTrigger>
-        <Form
-          method="POST"
-          className="flex flex-col justify-center items-center w-full max-w-xl"
-        >
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogDescription>
-                Create your new purchase group.
-              </DialogDescription>
-            </DialogHeader>
-            <section className="flex flex-col gap-3">
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogDescription>
+              Create your new purchase group.
+            </DialogDescription>
+          </DialogHeader>
+          <Form method="POST" className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <Label htmlFor="name">Name</Label>
               <Input type="text" name="name" placeholder="Name" />
-            </section>
-            <section className="flex flex-col gap-3">
+            </div>
+            <div className="flex flex-col gap-3">
               <Label htmlFor="description">Description</Label>
               <Input type="text" name="description" placeholder="Description" />
-            </section>
-            <section className="flex flex-col gap-3">
+            </div>
+            <div className="flex flex-col gap-3">
               <Label htmlFor="emrecipientsail">Recipients</Label>
               <Input type="text" name="recipients" placeholder="recipients" />
-            </section>
+            </div>
             <DialogFooter>
-              <Button type="submit">Create</Button>
+              <Button type="submit" onClick={() => toggleIsOpen(!isOpen)}>
+                Create
+              </Button>
             </DialogFooter>
-          </DialogContent>{" "}
-        </Form>
+          </Form>
+        </DialogContent>
       </Dialog>
     </section>
   );
