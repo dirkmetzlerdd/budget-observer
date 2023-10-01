@@ -7,8 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "app/@/components/ui/table";
+import SelectTransactionGroup from "./selectTransactionGroup";
+import { OutletContext } from "~/types/main";
 
-export default function TransactionsTable({ data }: { data: any }) {
+export default function TransactionsTable({
+  transactions,
+  groups,
+  outletContext,
+}: {
+  transactions: any;
+  groups: any;
+  outletContext: OutletContext;
+}) {
   return (
     <div className="border rounded-md border-grey-300">
       <Table>
@@ -23,13 +33,23 @@ export default function TransactionsTable({ data }: { data: any }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item: any) => (
-            <TableRow key={item.invoice}>
+          {transactions.map((item: any) => (
+            <TableRow key={item.id}>
               <TableCell className="font-medium">{item.date}</TableCell>
-              <TableCell>...</TableCell>
+              <TableCell>
+                <SelectTransactionGroup
+                  transactionId={item.id}
+                  purchaseGroupId={item.purchaseGroupId}
+                  groups={groups}
+                  outletContext={outletContext}
+                />
+              </TableCell>
               <TableCell>{item.recipient}</TableCell>
               <TableCell>{item.usage}</TableCell>
               <TableCell className="text-right">{item.amount}</TableCell>
+              {/* <TableCell className="text-right">
+                <Pencil size={18} className="cursor-pointer" />
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

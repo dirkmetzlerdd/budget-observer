@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "app/@/components/ui/table";
+import { Pencil } from "lucide-react";
 
 export default function PurchaseGroupsTable({ data }: { data: any }) {
   return (
@@ -25,10 +26,16 @@ export default function PurchaseGroupsTable({ data }: { data: any }) {
           {data.map((item: any) => (
             <TableRow key={item.id}>
               <TableCell className="font-medium">{item.name}</TableCell>
-              <TableCell>{item.name}</TableCell>
+              <TableCell>
+                {item.description}
+                ID:
+                {item.id}
+              </TableCell>
               <TableCell>{item.color}</TableCell>
-              <TableCell>{item.usage}</TableCell>
               <TableCell>{item.recepients}</TableCell>
+              <TableCell className="flex gap-4">
+                <Pencil size={18} className="cursor-pointer" />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

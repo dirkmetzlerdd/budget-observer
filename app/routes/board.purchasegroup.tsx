@@ -20,7 +20,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  const { data } = await supabase.from("purchaseGroup").select();
+  const { data } = await supabase
+    .from("purchaseGroup")
+    .select()
+    .eq("owner_id", session?.user.id);
 
   return json({ groups: data });
 }

@@ -4,8 +4,6 @@ import { CsvUpload } from "~/@/components/uploadButton";
 import { OutletContext } from "~/types/main";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  console.log(await request.json());
-  console.log(params);
   return json({});
 };
 
