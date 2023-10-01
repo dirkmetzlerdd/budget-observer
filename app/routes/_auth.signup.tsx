@@ -1,7 +1,7 @@
 import { Button } from "app/@/components/ui/button";
 import { Input } from "app/@/components/ui/input";
 import { Label } from "app/@/components/ui/label";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useActionData } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -32,13 +32,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       password,
     });
 
-    // TODO UI feedback
+    if (result.data?.user?.identities?.length === 0) {
+      return json({ message: "This user already exists" });
+    }
   }
 
   return redirect("/");
 };
 
 export default function Logout() {
+  const data = useActionData<typeof action>();
+
   return (
     <Form
       method="POST"
@@ -75,6 +79,7 @@ export default function Logout() {
             Already have an account?
           </Link>
         </section>
+        {data?.message && <p className="text-red-600">{data.message}</p>}
       </div>
     </Form>
   );
