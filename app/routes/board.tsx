@@ -6,9 +6,9 @@ export default function Board() {
   const outletContext = useOutletContext<OutletContext>();
 
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <SideMenu />
-      <div className="m-6">
+      <div className="w-full">
         <Outlet context={outletContext} />
       </div>
     </div>

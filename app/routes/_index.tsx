@@ -14,7 +14,7 @@ export default function Index() {
       style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
       className="flex"
     >
-      <Outlet />
+      NOTHING
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { Link, useMatches } from "@remix-run/react";
 import { LogIn, Receipt, User } from "lucide-react";
 import { Session } from "@supabase/supabase-js";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function MainHeader({
   session,
@@ -10,12 +11,12 @@ export default function MainHeader({
   signOut: () => void;
 }) {
   const matches = useMatches();
-
+  const userAvatarUrl = "https://github.com/dirkmetzlerdd.png";
   return (
-    <header className="rounded-md flex justify-between items-center bg-slate-50 px-4">
+    <header className="flex justify-between items-center bg-slate-50 p-2 pr-3 border-b border-slate-200">
       <Link
         to="/"
-        className="font-bold m-2 ml-0 p-2 pl-3 pr-3 flex items-center bg-[#9fd3c7] rounded-md text-[#142d4c]"
+        className="font-bold p-2 pl-3 pr-3 flex items-center bg-[#9fd3c7] rounded-md text-[#142d4c]"
       >
         <Receipt className="mr-2 h-8 w-8 hover:scale-110 transition-all duration-200" />{" "}
         b.obs
@@ -27,9 +28,13 @@ export default function MainHeader({
             <LogIn />
           </Link>
         ) : (
-          <>
-            <span className="mr-2">{session.user.email}</span> <User />
-          </>
+          <Avatar>
+            <AvatarImage
+              src={userAvatarUrl}
+              className="rounded-full border-2 border-[#9fd3c7]"
+            />
+            <AvatarFallback>...</AvatarFallback>
+          </Avatar>
         )}
       </span>
     </header>

@@ -27,6 +27,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
               bookingType: line[3],
               usage: line[4],
               amount: parseFloat(line[5]), // TODO FORMAT!!
+              owner_id: outletContext.session.user.id,
             };
           });
 
