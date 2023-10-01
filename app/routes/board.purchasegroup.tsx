@@ -28,11 +28,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return json({ groups: data });
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
 
-  console.log(request);
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -43,38 +42,44 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const formData = await request.formData();
-  const name = formData.get("name");
-  const description = formData.get("description");
-  const recipients = formData.get("recipients") as string;
+  const formName = formData.get("formName");
 
-  const { status, data } = await supabase
-    .from("purchaseGroup")
-    .insert({
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const recipients = formData.get("recipients") as string;
+  const color = formData.get("color") as string;
+
+  if (formName === "createPurchaseGroup") {
+    supabase.from("purchaseGroup").insert({
       name,
       description,
+      color: color,
       // recipients: {},
       owner_id: userId,
-    })
-    .select();
+    });
+  }
 
-  // if (status !== 201 || !data || data?.length === 0) {
-  //   return redirect("/");
-  // }
+  if (formName === "editPurchaseGroup") {
+    const url = new URL(request.url);
+    const groupid = url.searchParams.get("groupid");
 
-  // const newModel: Model = data[0];
+    const { status, data } = await supabase
+      .from("purchaseGroup")
+      .update({
+        name,
+        description,
+        // recipients: {},
+        color: color,
+      })
+      .eq("id", groupid);
+  }
 
-  // if (!newModel.id) {
-  //   return redirect("/");
-  // }
-
-  return json({ data, status });
+  return json({});
 };
 
 export default function Purchasegroup() {
-  const data = useActionData<typeof action>();
   const { groups } = useLoaderData<typeof loader>();
 
-  console.log(groups);
   return (
     <div className="flex flex-col">
       <h1 className="mb-4 text-md font-bold">My Purchase Groups</h1>

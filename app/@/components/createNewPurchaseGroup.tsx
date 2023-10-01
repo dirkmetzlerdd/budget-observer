@@ -45,8 +45,17 @@ export default function CreateNewPurchaseGroup() {
               <Label htmlFor="emrecipientsail">Recipients</Label>
               <Input type="text" name="recipients" placeholder="recipients" />
             </div>
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="emrecipientsail">Color</Label>
+              <Input type="text" name="color" placeholder="color" />
+            </div>
             <DialogFooter>
-              <Button type="submit" onClick={() => toggleIsOpen(!isOpen)}>
+              <Button
+                type="submit"
+                name="formName"
+                value={"createPurchaseGroup"}
+                onClick={() => toggleIsOpen(!isOpen)}
+              >
                 Create
               </Button>
             </DialogFooter>
