@@ -1,3 +1,4 @@
+import { DbTables } from "~/types/db";
 import {
   Select,
   SelectContent,
@@ -8,25 +9,26 @@ import {
   SelectValue,
 } from "./ui/select";
 import { OutletContext } from "~/types/main";
+import { TransactionGroup } from "~/types/models";
 
 export default function SelectTransactionGroup({
   transactionId,
   groups,
-  purchaseGroupId,
+  transactionGroupId,
   outletContext,
 }: {
   transactionId: string;
-  purchaseGroupId: string;
-  groups: any;
+  transactionGroupId: string;
+  groups: Array<TransactionGroup>;
   outletContext: OutletContext;
 }) {
   const update = (value: string) => {
-    const id = groups.find((item) => item.name === value)?.id;
+    const id = groups.find((group) => group.name === value)?.id;
 
     (async function () {
       await outletContext.supabase
-        .from("transaction")
-        .update({ purchaseGroupId: id })
+        .from(DbTables.TRANSACTION)
+        .update({ transactionGroupId: id })
         .eq("id", transactionId);
     })();
   };
@@ -34,7 +36,9 @@ export default function SelectTransactionGroup({
   return (
     <Select
       onValueChange={update}
-      defaultValue={groups.find((group) => group.id === purchaseGroupId)?.name}
+      defaultValue={
+        groups.find((group) => group.id === transactionGroupId)?.name
+      }
     >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a type" />

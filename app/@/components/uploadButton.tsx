@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
+import { DbTables } from "~/types/db";
 
 export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
   function readCsv(input: React.ChangeEvent<HTMLInputElement>) {
@@ -33,7 +34,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
 
         (async function () {
           const { status, data } = await outletContext.supabase
-            .from("transaction")
+            .from(DbTables.TRANSACTION)
             .insert(transactions)
             .select();
         })();

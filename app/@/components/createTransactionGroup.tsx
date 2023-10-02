@@ -14,7 +14,7 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-export default function CreateNewPurchaseGroup() {
+export default function CreateTransactionGroup() {
   const [isOpen, toggleIsOpen] = useState(false);
 
   return (
@@ -23,13 +23,13 @@ export default function CreateNewPurchaseGroup() {
         <DialogTrigger asChild>
           <Button variant="outline" onClick={() => toggleIsOpen(!isOpen)}>
             <Plus className="mr-3" />
-            new purchase group
+            new transaction group
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogDescription>
-              Create your new purchase group.
+              Create your new transaction group.
             </DialogDescription>
           </DialogHeader>
           <Form method="POST" className="flex flex-col gap-4">
@@ -53,7 +53,7 @@ export default function CreateNewPurchaseGroup() {
               <Button
                 type="submit"
                 name="formName"
-                value={"createPurchaseGroup"}
+                value={"createTransactionGroup"}
                 onClick={() => toggleIsOpen(!isOpen)}
               >
                 Create

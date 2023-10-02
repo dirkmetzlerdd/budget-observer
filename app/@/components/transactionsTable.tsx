@@ -9,14 +9,15 @@ import {
 } from "app/@/components/ui/table";
 import SelectTransactionGroup from "./selectTransactionGroup";
 import { OutletContext } from "~/types/main";
+import { Transaction, TransactionGroup } from "~/types/models";
 
 export default function TransactionsTable({
   transactions,
   groups,
   outletContext,
 }: {
-  transactions: any;
-  groups: any;
+  transactions: Array<Transaction>;
+  groups: Array<TransactionGroup>;
   outletContext: OutletContext;
 }) {
   return (
@@ -33,23 +34,20 @@ export default function TransactionsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {transactions.map((item: any) => (
+          {transactions.map((item) => (
             <TableRow key={item.id}>
               <TableCell className="font-medium">{item.date}</TableCell>
               <TableCell>
                 <SelectTransactionGroup
                   transactionId={item.id}
-                  purchaseGroupId={item.purchaseGroupId}
+                  transactionGroupId={item.transactionGroupId}
                   groups={groups}
                   outletContext={outletContext}
                 />
               </TableCell>
-              <TableCell>{item.recipient}</TableCell>
+              <TableCell>{item.partner}</TableCell>
               <TableCell>{item.usage}</TableCell>
               <TableCell className="text-right">{item.amount}</TableCell>
-              {/* <TableCell className="text-right">
-                <Pencil size={18} className="cursor-pointer" />
-              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

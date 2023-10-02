@@ -7,13 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "app/@/components/ui/table";
-import EditNewPurchaseGroup from "./editPurchaseGroup";
+import EditTransactionGroup from "./editTransactionGroup";
+import { TransactionGroup } from "~/types/models";
 
-export default function PurchaseGroupsTable({ data }: { data: any }) {
+export default function TransactionGroupsTable({
+  groups,
+}: {
+  groups: Array<TransactionGroup>;
+}) {
   return (
     <div className="border rounded-md border-grey-300 mt-4">
       <Table>
-        <TableCaption>A list of your purchase groups.</TableCaption>
+        <TableCaption>A list of your transaction groups.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
@@ -23,7 +28,7 @@ export default function PurchaseGroupsTable({ data }: { data: any }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((group: any) => (
+          {groups.map((group) => (
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>
@@ -32,9 +37,9 @@ export default function PurchaseGroupsTable({ data }: { data: any }) {
                 {group.id}
               </TableCell>
               <TableCell>{group.color}</TableCell>
-              <TableCell>{group.recepients}</TableCell>
+              <TableCell>{group.partners}</TableCell>
               <TableCell className="flex gap-4">
-                <EditNewPurchaseGroup group={group} />
+                <EditTransactionGroup group={group} />
               </TableCell>
             </TableRow>
           ))}

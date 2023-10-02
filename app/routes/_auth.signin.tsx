@@ -3,7 +3,7 @@ import { Input } from "app/@/components/ui/input";
 import { Label } from "app/@/components/ui/label";
 import { Link, Form, useOutletContext, useSubmit } from "@remix-run/react";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { useRef, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { OutletContext } from "~/types/main";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 
@@ -34,7 +34,7 @@ export default function Signin() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const signIn = (event: any) => {
+  const signIn = (event: SyntheticEvent) => {
     (async function () {
       event.preventDefault();
 

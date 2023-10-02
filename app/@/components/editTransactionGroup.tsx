@@ -11,9 +11,14 @@ import {
   DialogTrigger,
 } from "app/@/components/ui/dialog";
 import { Pencil } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { TransactionGroup } from "~/types/models";
 
-export default function EditPurchaseGroup({ group }: { group: any }) {
+export default function EditTransactionGroup({
+  group,
+}: {
+  group: TransactionGroup;
+}) {
   const [isOpen, toggleIsOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -31,7 +36,6 @@ export default function EditPurchaseGroup({ group }: { group: any }) {
     toggleIsOpen(!isOpen);
   };
 
-  console.log(searchParams);
   return (
     <section>
       <Dialog open={isOpen}>
@@ -42,7 +46,7 @@ export default function EditPurchaseGroup({ group }: { group: any }) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogDescription>Edit your purchase group.</DialogDescription>
+            <DialogDescription>Edit your transaction group.</DialogDescription>
           </DialogHeader>
           <Form method="POST" className="flex flex-col gap-4">
             <div className="flex flex-col gap-3">
@@ -60,20 +64,20 @@ export default function EditPurchaseGroup({ group }: { group: any }) {
                 type="text"
                 name="description"
                 placeholder="Description"
-                defaultValue={group.nadescriptionme}
+                defaultValue={group.description}
               />
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="emrecipientsail">Recipients</Label>
+              <Label htmlFor="partners">Partners</Label>
               <Input
                 type="text"
-                name="recipients"
-                placeholder="recipients"
-                defaultValue={group.recipients}
+                name="partners"
+                placeholder="partners"
+                defaultValue={group.partners}
               />
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="emrecipientsail">Color</Label>
+              <Label htmlFor="color">Color</Label>
               <Input
                 type="text"
                 name="color"
@@ -85,7 +89,7 @@ export default function EditPurchaseGroup({ group }: { group: any }) {
               <Button
                 type="submit"
                 name="formName"
-                value={"editPurchaseGroup"}
+                value={"editTransactionGroup"}
                 onClick={toggle}
               >
                 Update
