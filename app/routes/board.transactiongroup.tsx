@@ -56,7 +56,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       name,
       description,
       color,
-      // partners: {},
+      partners: [partners],
       owner_id: userId,
     });
   }
@@ -70,7 +70,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .update({
         name,
         description,
-        // partners: { test: 777 },
+        partners: [partners],
         color: color,
       })
       .eq("id", groupid);

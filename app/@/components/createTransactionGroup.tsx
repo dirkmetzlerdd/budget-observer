@@ -41,11 +41,11 @@ export default function CreateTransactionGroup() {
               <Input type="text" name="description" placeholder="Description" />
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="emrecipientsail">Recipients</Label>
-              <Input type="text" name="recipients" placeholder="recipients" />
+              <Label htmlFor="partners">Partners</Label>
+              <Input type="text" name="partners" placeholder="partners" />
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="emrecipientsail">Color</Label>
+              <Label htmlFor="color">Color</Label>
               <Input type="text" name="color" placeholder="color" />
             </div>
             <DialogFooter>
