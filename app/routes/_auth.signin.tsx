@@ -63,7 +63,7 @@ export default function Signin() {
       onSubmit={signIn}
       className="flex-col flex justify-center items-center w-full mt-7"
     >
-      <div className="flex flex-col justify-center w-full max-w-lg bg-slate-50 p-4 gap-6 rounded-md">
+      <div className="flex flex-col justify-center w-full max-w-lg bg-slate-50 p-4 gap-6 rounded-md border">
         <section className="flex flex-col gap-3">
           <Label htmlFor="email">Email</Label>
           <Input type="email" name="email" placeholder="Email" ref={emailRef} />

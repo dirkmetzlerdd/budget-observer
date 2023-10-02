@@ -10,9 +10,20 @@ import {
 } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return json({});
-};
+export async function loader({ request }: LoaderFunctionArgs) {
+  const response = new Response();
+  const supabase = createSupabaseServerClient({ request, response });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session?.user) {
+    return redirect("/");
+  }
+
+  return json({ user: session?.user }, { headers: response.headers });
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const response = new Response();
@@ -48,7 +59,7 @@ export default function Logout() {
       method="POST"
       className="flex flex-col justify-center items-center w-full mt-7"
     >
-      <div className="flex flex-col justify-center w-full max-w-lg bg-slate-50 p-4 gap-6 rounded-md">
+      <div className="flex flex-col justify-center w-full max-w-lg bg-slate-50 p-4 gap-6 rounded-md border">
         <section className="flex flex-col gap-3">
           <Label htmlFor="first-name">First Name</Label>
           <Input type="text" name="first-name" placeholder="First Name" />

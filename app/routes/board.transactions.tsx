@@ -39,7 +39,8 @@ export default function Transactions() {
   const outletContext = useOutletContext<OutletContext>();
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
+      <h1 className="mb-4 text-md font-bold">Transactions</h1>
       <TransactionsTable
         transactions={transactions}
         groups={groups}
