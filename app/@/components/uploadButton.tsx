@@ -24,7 +24,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
           .map((line) => {
             return {
               date: new Date(line[0]),
-              recipient: line[2],
+              partner: line[2],
               bookingType: line[3],
               usage: line[4],
               amount: parseFloat(line[5]), // TODO FORMAT!!

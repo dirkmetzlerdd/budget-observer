@@ -52,10 +52,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const color = formData.get("color") as string;
 
   if (formName === "createTransactionGroup") {
-    supabase.from(DbTables.TRANSACTION_GROUP).insert({
+    await supabase.from(DbTables.TRANSACTION_GROUP).insert({
       name,
       description,
-      color: color,
+      color,
       // partners: {},
       owner_id: userId,
     });
@@ -65,7 +65,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     const url = new URL(request.url);
     const groupid = url.searchParams.get("groupid");
 
-    const { status, data } = await supabase
+    await supabase
       .from(DbTables.TRANSACTION_GROUP)
       .update({
         name,
@@ -74,6 +74,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         color: color,
       })
       .eq("id", groupid);
+  }
+
+  if (formName === "deleteTransactionGroup") {
+    const url = new URL(request.url);
+    const groupid = url.searchParams.get("groupid");
+
+    await supabase.from(DbTables.TRANSACTION_GROUP).delete().eq("id", groupid);
   }
 
   return json({});

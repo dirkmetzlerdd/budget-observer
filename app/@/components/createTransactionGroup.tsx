@@ -8,7 +8,6 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "app/@/components/ui/dialog";
 import { Plus } from "lucide-react";
@@ -18,8 +17,8 @@ export default function CreateTransactionGroup() {
   const [isOpen, toggleIsOpen] = useState(false);
 
   return (
-    <section>
-      <Dialog open={isOpen}>
+    <div>
+      <Dialog open={isOpen} onOpenChange={toggleIsOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" onClick={() => toggleIsOpen(!isOpen)}>
             <Plus className="mr-3" />
@@ -62,6 +61,6 @@ export default function CreateTransactionGroup() {
           </Form>
         </DialogContent>
       </Dialog>
-    </section>
+    </div>
   );
 }

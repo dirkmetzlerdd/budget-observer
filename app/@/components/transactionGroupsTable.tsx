@@ -9,6 +9,7 @@ import {
 } from "app/@/components/ui/table";
 import EditTransactionGroup from "./editTransactionGroup";
 import { TransactionGroup } from "~/types/models";
+import DeleteTransactionGroup from "./deleteTransactionGroup";
 
 export default function TransactionGroupsTable({
   groups,
@@ -24,22 +25,19 @@ export default function TransactionGroupsTable({
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Color</TableHead>
-            <TableHead>Recepients</TableHead>
+            <TableHead>Partners</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {groups.map((group) => (
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
-              <TableCell>
-                {group.description}
-                ID:
-                {group.id}
-              </TableCell>
+              <TableCell>{group.description}</TableCell>
               <TableCell>{group.color}</TableCell>
               <TableCell>{group.partners}</TableCell>
               <TableCell className="flex gap-4">
                 <EditTransactionGroup group={group} />
+                <DeleteTransactionGroup group={group} />
               </TableCell>
             </TableRow>
           ))}
