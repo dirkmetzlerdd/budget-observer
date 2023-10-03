@@ -7,7 +7,10 @@ export default function Board() {
 
   return (
     <div className="flex h-full">
-      <SideMenu />
+      <SideMenu
+        supabase={outletContext.supabase}
+        session={outletContext.session}
+      />
       <div className="w-full p-4">
         <Outlet context={outletContext} />
       </div>
