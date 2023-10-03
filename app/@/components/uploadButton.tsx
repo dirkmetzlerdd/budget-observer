@@ -35,6 +35,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
                 usage: line[4],
                 amount: parseFloat(line[5]), // TODO FORMAT!!
                 owner_id: outletContext.session.user.id,
+                transactionGroupId: 18, // GROUP OTHER
                 transactionId: newTransactionImport.data
                   ? newTransactionImport.data[0].id
                   : null,
