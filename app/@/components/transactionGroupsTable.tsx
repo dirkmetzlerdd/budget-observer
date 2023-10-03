@@ -34,7 +34,7 @@ export default function TransactionGroupsTable({
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>{group.description}</TableCell>
               <TableCell>{group.color}</TableCell>
-              <TableCell>{group.partners}</TableCell>
+              <TableCell>{group.partners.join(", ")}</TableCell>
               <TableCell className="flex gap-4">
                 <EditTransactionGroup group={group} />
                 <DeleteTransactionGroup group={group} />
