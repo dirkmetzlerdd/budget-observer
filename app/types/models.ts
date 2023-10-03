@@ -8,7 +8,7 @@ export type Transaction = {
   transactionGroupId: string;
   partner: string;
   ownerId: string;
-  transactionId: string;
+  transactionId: string | null;
 };
 
 type Partners = Array<string>;
