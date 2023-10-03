@@ -67,7 +67,7 @@ export default function EditTransactionGroup({
             <Label htmlFor="partners">Partners</Label>
             {partners.map((partner, i) => {
               return (
-                <div className="flex flex-row">
+                <div className="flex flex-row" key={i}>
                   <Input type="text" name="partners" defaultValue={partner} />
                   <X
                     className="cursor-pointer h-full ml-2 transition-all duration-100 hover:scale-125 flex align-middle"
