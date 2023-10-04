@@ -1,7 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { Form } from "@remix-run/react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
@@ -25,6 +24,11 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
             .insert({})
             .select();
 
+          const defaultGroup = await outletContext.supabase
+            .from(DbTables.TRANSACTION_GROUP)
+            .select("id")
+            .match({ owner_id: outletContext.session.user.id, name: "Other" });
+
           const transactions = extractTransactions(arr)
             .map((line) => line.split(";"))
             .map((line) => {
@@ -35,7 +39,9 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
                 usage: line[4],
                 amount: parseFloat(line[5]), // TODO FORMAT!!
                 owner_id: outletContext.session.user.id,
-                transactionGroupId: 18, // GROUP OTHER
+                transactionGroupId: defaultGroup.data
+                  ? defaultGroup.data[0].id
+                  : null,
                 transactionId: newTransactionImport.data
                   ? newTransactionImport.data[0].id
                   : null,

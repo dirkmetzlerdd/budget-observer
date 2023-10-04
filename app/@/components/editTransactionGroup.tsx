@@ -36,7 +36,11 @@ export default function EditTransactionGroup({
   return (
     <Dialog open={isOpen} onOpenChange={toggleIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => toggleIsOpen(!isOpen)}>
+        <Button
+          disabled={group.name === "Other"}
+          variant="outline"
+          onClick={() => toggleIsOpen(!isOpen)}
+        >
           <Pencil size={18} className="cursor-pointer" />
         </Button>
       </DialogTrigger>
