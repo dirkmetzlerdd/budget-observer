@@ -1,7 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { Form } from "@remix-run/react";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
@@ -38,19 +37,6 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
 
       if (typeof result === "string") {
         const arr = result.split("\n");
-
-        const transactions = extractTransactions(arr)
-          .map((line) => line.split(";"))
-          .map((line) => {
-            return {
-              date: new Date(line[0]),
-              partner: line[2],
-              bookingType: line[3],
-              usage: line[4],
-              amount: parseFloat(line[5]), // TODO FORMAT!!
-              owner_id: outletContext.session.user.id,
-            };
-          });
 
         (async function () {
           const newTransactionImport = await outletContext.supabase

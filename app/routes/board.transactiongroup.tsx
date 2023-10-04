@@ -48,7 +48,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const partners = formData.get("partners") as string;
+  const partners = formData.getAll("partners") as Array<string>;
   const color = formData.get("color") as string;
 
   if (formName === "createTransactionGroup") {
@@ -70,7 +70,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       .update({
         name,
         description,
-        partners: [partners],
+        partners: partners,
         color: color,
       })
       .eq("id", groupid);

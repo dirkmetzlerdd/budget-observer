@@ -31,7 +31,11 @@ export default function DeleteTransactionGroup({
   return (
     <Dialog open={isOpen} onOpenChange={toggleIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => toggleIsOpen(!isOpen)}>
+        <Button
+          disabled={group.name === "Other"}
+          variant="outline"
+          onClick={() => toggleIsOpen(!isOpen)}
+        >
           <Trash2 size={18} className="cursor-pointer" />
         </Button>
       </DialogTrigger>

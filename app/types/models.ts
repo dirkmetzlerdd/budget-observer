@@ -8,6 +8,7 @@ export type Transaction = {
   transactionGroupId: string;
   partner: string;
   ownerId: string;
+  transactionId: string | null;
 };
 
 type Partners = Array<string>;
@@ -18,4 +19,9 @@ export type TransactionGroup = {
   description: string;
   color: string;
   partners: Partners;
+};
+
+export type TransactionImport = {
+  id: string;
+  createdAt: string;
 };

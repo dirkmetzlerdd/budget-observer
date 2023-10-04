@@ -9,6 +9,7 @@ import {
   redirect,
 } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
+import { DbTables } from "~/types/db";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const response = new Response();
@@ -42,6 +43,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       email,
       password,
     });
+
+    if (result.data?.user?.id) {
+      const res = await supabase.from(DbTables.TRANSACTION_GROUP).insert({
+        name: "Other",
+        description: "default group",
+        color: "grey",
+        partners: [],
+        owner_id: result.data?.user?.id,
+      });
+    }
 
     if (result.data?.user?.identities?.length === 0) {
       return json({ message: "This user already exists" });
