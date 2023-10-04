@@ -5,8 +5,28 @@ import { Button } from "./ui/button";
 import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
+import { TransactionGroup } from "~/types/models";
 
 export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
+  function getDetectedGroupId(
+    allGroups: Array<TransactionGroup>,
+    transactionPartner: string,
+  ) {
+    let count = 0;
+    let detectedId = undefined;
+    allGroups.forEach((group) => {
+      group.partners.forEach((grouppartner) => {
+        if (transactionPartner.includes(grouppartner)) {
+          detectedId = group.id;
+          ++count;
+        }
+      });
+    });
+
+    if (count > 1) return undefined;
+    return detectedId;
+  }
+
   function readCsv(input: React.ChangeEvent<HTMLInputElement>) {
     let file = input.target.files && input.target.files[0];
     if (!file) return;
@@ -33,6 +53,44 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
           });
 
         (async function () {
+          const newTransactionImport = await outletContext.supabase
+            .from(DbTables.TRANSACTION_IMPORT)
+            .insert({})
+            .select();
+
+          const allGroups = await outletContext.supabase
+            .from(DbTables.TRANSACTION_GROUP)
+            .select()
+            .eq("owner_id", outletContext.session.user.id);
+
+          const defaultGroup = allGroups.data?.find(
+            (item) => item.name === "Other",
+          );
+
+          const defaultId = defaultGroup.id ? defaultGroup.id : null;
+
+          const transactions = extractTransactions(arr)
+            .map((line) => line.split(";"))
+            .map((line) => {
+              const detectedGroupId = getDetectedGroupId(
+                allGroups.data,
+                line[2],
+              );
+
+              return {
+                date: new Date(line[0]),
+                partner: line[2],
+                bookingType: line[3],
+                usage: line[4],
+                amount: parseFloat(line[5]), // TODO FORMAT!!
+                owner_id: outletContext.session.user.id,
+                transactionGroupId: detectedGroupId || defaultId,
+                transactionId: newTransactionImport.data
+                  ? newTransactionImport.data[0].id
+                  : null,
+              };
+            });
+
           const { status, data } = await outletContext.supabase
             .from(DbTables.TRANSACTION)
             .insert(transactions)
