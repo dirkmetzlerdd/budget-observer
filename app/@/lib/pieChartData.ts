@@ -1,6 +1,7 @@
 import { Transaction, TransactionGroup } from "~/types/models";
 
 export function getPieChartData(
+  dataType: "expenses" | "income",
   transactionData: Array<Transaction>,
   groupData: Array<TransactionGroup>,
 ) {
@@ -16,5 +17,13 @@ export function getPieChartData(
   });
 
   console.log(groupDataWithAmount);
-  return groupDataWithAmount.filter((item) => item.amount < 0);
+  return groupDataWithAmount.filter((item) => {
+    if (dataType === "expenses") {
+      return item.amount < 0;
+    }
+
+    if (dataType === "income") {
+      return item.amount > 0;
+    }
+  });
 }
