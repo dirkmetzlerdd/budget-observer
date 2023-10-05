@@ -30,34 +30,33 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .select()
     .eq("owner_id", session?.user.id);
 
-  const pieChartData = getPieChartData(
+  const expenses = getPieChartData(
+    "expenses",
     transactionData.data as Transaction[],
     groupData.data as TransactionGroup[],
   );
 
-  return json({ pieChartData: pieChartData || [] });
+  const income = getPieChartData(
+    "income",
+    transactionData.data as Transaction[],
+    groupData.data as TransactionGroup[],
+  );
+
+  return json({ expenses: expenses || [], income: income || [] });
 }
 
 export default function Charts() {
-  const { pieChartData } = useLoaderData<typeof loader>();
-
+  const { expenses, income } = useLoaderData<typeof loader>();
   Chart.register(CategoryScale);
-  const [chartData, setChartData] = useState({
-    labels: pieChartData.map((data) => data.name),
-    datasets: [
-      {
-        label: "$",
-        data: pieChartData.map((data) => data.amount),
-        backgroundColor: pieChartData.map((item) => item.color),
-        borderColor: "black",
-        borderWidth: 1,
-      },
-    ],
-  });
 
   return (
-    <div className="w-[50%]">
-      <PieChart chartData={chartData} />
+    <div className="rounded-md border flex justify-between px-2 pb-6">
+      <div className="w-[40%]">
+        <PieChart dataSet={expenses} title="Expenses" />
+      </div>
+      <div className="w-[40%]">
+        <PieChart dataSet={income} title="Income" />
+      </div>
     </div>
   );
 }
