@@ -56,7 +56,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       name,
       description,
       color,
-      partners: [partners],
+      partners: partners,
       owner_id: userId,
     });
   }
