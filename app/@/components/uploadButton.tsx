@@ -69,7 +69,9 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
                 partner: line[2],
                 bookingType: line[3],
                 usage: line[4],
-                amount: parseFloat(line[5]), // TODO FORMAT!!
+                amount: parseFloat(
+                  line[5].replaceAll(".", "").replaceAll(",", "."),
+                ),
                 owner_id: outletContext.session.user.id,
                 transactionGroupId: detectedGroupId || defaultId,
                 transactionId: newTransactionImport.data
