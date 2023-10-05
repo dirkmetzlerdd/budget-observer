@@ -36,7 +36,9 @@ export default function TransactionsTable({
         <TableBody>
           {transactions.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.date}</TableCell>
+              <TableCell className="font-medium min-w-[180px]">
+                {new Date(item.date).toLocaleDateString()}
+              </TableCell>
               <TableCell>
                 <SelectTransactionGroup
                   transactionId={item.id}

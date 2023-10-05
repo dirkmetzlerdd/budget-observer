@@ -21,11 +21,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const transactionData: { data: Array<Transaction> | null } = await supabase
     .from(DbTables.TRANSACTION)
     .select()
+    .order("date")
     .eq("owner_id", session?.user.id);
 
   const groupData: { data: Array<TransactionGroup> | null } = await supabase
     .from(DbTables.TRANSACTION_GROUP)
     .select()
+    .order("date")
     .eq("owner_id", session?.user.id);
 
   return json({
