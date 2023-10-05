@@ -16,7 +16,6 @@ export function getPieChartData(
     return { ...group, amount };
   });
 
-  console.log(groupDataWithAmount);
   return groupDataWithAmount.filter((item) => {
     if (dataType === "expenses") {
       return item.amount < 0;

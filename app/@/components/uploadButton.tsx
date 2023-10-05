@@ -16,7 +16,9 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
     let detectedId = undefined;
     allGroups.forEach((group) => {
       group.partners.forEach((grouppartner) => {
-        if (transactionPartner.includes(grouppartner)) {
+        if (
+          transactionPartner.toLowerCase().includes(grouppartner.toLowerCase())
+        ) {
           detectedId = group.id;
           ++count;
         }

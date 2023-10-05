@@ -27,7 +27,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const groupData: { data: Array<TransactionGroup> | null } = await supabase
     .from(DbTables.TRANSACTION_GROUP)
     .select()
-    .order("date")
     .eq("owner_id", session?.user.id);
 
   return json({
