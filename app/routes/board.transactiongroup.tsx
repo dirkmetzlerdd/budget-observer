@@ -9,7 +9,7 @@ import CreateTransactionGroup from "~/@/components/createTransactionGroup";
 import TransactionGroupsTable from "~/@/components/transactionGroupsTable";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 import { DbTables } from "~/types/db";
-import { TransactionGroup } from "~/types/models";
+import { Transaction, TransactionGroup } from "~/types/models";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const response = new Response();
@@ -77,8 +77,30 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   if (formName === "deleteTransactionGroup") {
+    const response = new Response();
+    const supabase = createSupabaseServerClient({ request, response });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user.id) {
+      return redirect("/");
+    }
+
+    const allGroups: { data: Array<TransactionGroup> | null } = await supabase
+      .from(DbTables.TRANSACTION_GROUP)
+      .select()
+      .eq("owner_id", session?.user.id);
+
+    const defaultGroup = allGroups.data?.find((item) => item.name === "Other");
+
     const url = new URL(request.url);
     const groupid = url.searchParams.get("groupid");
+
+    await supabase
+      .from(DbTables.TRANSACTION)
+      .update({ transactionGroupId: defaultGroup?.id })
+      .match({ transactionGroupId: groupid, owner_id: session?.user.id });
 
     await supabase.from(DbTables.TRANSACTION_GROUP).delete().eq("id", groupid);
   }
