@@ -30,7 +30,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     .select()
     .eq("owner_id", session?.user.id);
 
-  const pieChartData = getPieChartData(transactionData.data, groupData.data);
+  const pieChartData = getPieChartData(
+    transactionData.data as Transaction[],
+    groupData.data as TransactionGroup[],
+  );
 
   return json({ pieChartData: pieChartData || [] });
 }

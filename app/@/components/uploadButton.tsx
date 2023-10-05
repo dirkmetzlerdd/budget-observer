@@ -5,6 +5,7 @@ import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
 import { TransactionGroup } from "~/types/models";
+import { switchDayAndMonth } from "../lib/dates";
 
 export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
   function getDetectedGroupId(
@@ -59,16 +60,18 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
             .map((line) => line.split(";"))
             .map((line) => {
               const detectedGroupId = getDetectedGroupId(
-                allGroups.data,
+                allGroups.data as TransactionGroup[],
                 line[2],
               );
 
               return {
-                date: new Date(line[0]),
+                date: new Date(switchDayAndMonth(line[0])),
                 partner: line[2],
                 bookingType: line[3],
                 usage: line[4],
-                amount: parseFloat(line[5]), // TODO FORMAT!!
+                amount: parseFloat(
+                  line[5].replaceAll(".", "").replaceAll(",", "."),
+                ),
                 owner_id: outletContext.session.user.id,
                 transactionGroupId: detectedGroupId || defaultId,
                 transactionId: newTransactionImport.data
