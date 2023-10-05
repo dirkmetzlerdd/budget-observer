@@ -99,7 +99,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     await supabase
       .from(DbTables.TRANSACTION)
-
       .update({ transactionGroupId: defaultGroup?.id })
       .match({ transactionGroupId: groupid, owner_id: session?.user.id });
 
