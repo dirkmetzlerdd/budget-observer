@@ -15,6 +15,5 @@ export function getPieChartData(
     return { ...group, amount };
   });
 
-  console.log(groupDataWithAmount);
   return groupDataWithAmount.filter((item) => item.amount < 0);
 }
