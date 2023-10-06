@@ -162,7 +162,7 @@ export default function ColorPopover({
       <PopoverTrigger>
         {" "}
         <div
-          className="w-[20px] h-[20px] rounded-full"
+          className="w-[20px] h-[20px] rounded-full border"
           style={{
             backgroundColor: currentColor,
           }}
