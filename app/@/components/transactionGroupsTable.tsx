@@ -24,7 +24,7 @@ export default function TransactionGroupsTable({
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Color</TableHead>
+            <TableHead align="center">Color</TableHead>
             <TableHead>Partners</TableHead>
           </TableRow>
         </TableHeader>
@@ -33,7 +33,14 @@ export default function TransactionGroupsTable({
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>{group.description}</TableCell>
-              <TableCell>{group.color}</TableCell>
+              <TableCell align="center" className="w-[50px]">
+                <div
+                  className="w-[20px] h-[20px] rounded-full"
+                  style={{
+                    backgroundColor: group.color,
+                  }}
+                ></div>
+              </TableCell>
               <TableCell>{group.partners.join(", ")}</TableCell>
               <TableCell className="flex gap-4">
                 <EditTransactionGroup group={group} />
