@@ -10,6 +10,7 @@ import {
 } from "./ui/select";
 import { OutletContext } from "~/types/main";
 import { TransactionGroup } from "~/types/models";
+import ColorPopover from "./colorPopover";
 
 export default function SelectTransactionGroup({
   transactionId,

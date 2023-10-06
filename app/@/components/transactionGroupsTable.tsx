@@ -10,6 +10,7 @@ import {
 import EditTransactionGroup from "./editTransactionGroup";
 import { TransactionGroup } from "~/types/models";
 import DeleteTransactionGroup from "./deleteTransactionGroup";
+import ColorPopover from "./colorPopover";
 
 export default function TransactionGroupsTable({
   groups,
@@ -33,13 +34,11 @@ export default function TransactionGroupsTable({
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>{group.description}</TableCell>
-              <TableCell align="center" className="w-[50px]">
-                <div
-                  className="w-[20px] h-[20px] rounded-full"
-                  style={{
-                    backgroundColor: group.color,
-                  }}
-                ></div>
+              <TableCell
+                align="center"
+                className="w-[50px] cursor-pointer transition-all duration-200 hover:scale-125"
+              >
+                <ColorPopover currentColor={group.color} />
               </TableCell>
               <TableCell>{group.partners.join(", ")}</TableCell>
               <TableCell className="flex gap-4">
