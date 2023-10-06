@@ -1,4 +1,5 @@
 import * as React from "react";
+// @ts-expect-error
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";
 
