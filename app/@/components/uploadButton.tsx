@@ -1,13 +1,50 @@
 import { Label } from "@radix-ui/react-label";
-import { Form } from "@remix-run/react";
+import { Form, useSearchParams } from "@remix-run/react";
 import { Input } from "./ui/input";
 import { extractTransactions } from "../lib/csvParser";
 import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
-import { TransactionGroup } from "~/types/models";
+import { TransactionGroup, TransactionImport } from "~/types/models";
 import { switchDayAndMonth } from "../lib/dates";
 
-export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "app/@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
+import { Button } from "./ui/button";
+import { Trash2 } from "lucide-react";
+import { DialogFooter, DialogHeader } from "./ui/dialog";
+import { useEffect, useState } from "react";
+
+export function CsvUpload({
+  outletContext,
+  allGroupsImport,
+}: {
+  outletContext: OutletContext;
+  allGroupsImport: TransactionImport[] | null;
+}) {
+  // const [isOpen, toggleIsOpen] = useState(false);
+  // const [_, setSearchParams] = useSearchParams();
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const params = new URLSearchParams();
+  //     params.set("groupid", group.id);
+  //     setSearchParams(params);
+  //   }
+  // }, [isOpen]);
+
   function getDetectedGroupId(
     allGroups: Array<TransactionGroup>,
     transactionPartner: string,
@@ -44,7 +81,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
         (async function () {
           const newTransactionImport = await outletContext.supabase
             .from(DbTables.TRANSACTION_IMPORT)
-            .insert({})
+            .insert({ owner_id: outletContext?.session?.user.id })
             .select();
 
           const allGroups = await outletContext.supabase
@@ -86,6 +123,16 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
             .from(DbTables.TRANSACTION)
             .insert(transactions)
             .select();
+
+          await outletContext.supabase
+            .from(DbTables.TRANSACTION_IMPORT)
+            .update({ transactions: transactions.length })
+            .match({
+              id: newTransactionImport.data
+                ? newTransactionImport.data[0].id
+                : null,
+            });
+          window.location.reload();
         })();
       }
     };
@@ -102,6 +149,57 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
           Upload
         </Button> */}
       </Form>
+      <div className="border rounded-md border-grey-300 mt-4">
+        <Table>
+          <TableCaption>A list of your transaction groups.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Id</TableHead>
+              <TableHead>Transactions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {allGroupsImport?.map((groupsImport) => (
+              <TableRow key={groupsImport.id}>
+                <TableCell className="font-medium">{groupsImport.id}</TableCell>
+                <TableCell className="font-medium">
+                  {groupsImport.transactions}
+                </TableCell>
+                {/* <Dialog open={isOpen} onOpenChange={toggleIsOpen}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      // onClick={() => toggleIsOpen(!isOpen)}
+                    >
+                      <Trash2 size={18} className="cursor-pointer" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogDescription>
+                        Delete <strong>{"group.name"}</strong>
+                      </DialogDescription>
+                    </DialogHeader>
+                    <Form method="POST" className="flex flex-col gap-4">
+                      Are you absolutely sure?
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          name="formName"
+                          value={"deleteTransactionGroup"}
+                          // onClick={() => toggleIsOpen(!isOpen)}
+                        >
+                          Delete
+                        </Button>
+                      </DialogFooter>
+                    </Form>
+                  </DialogContent>
+                </Dialog> */}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
