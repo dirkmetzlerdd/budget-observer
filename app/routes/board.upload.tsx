@@ -23,27 +23,69 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  const allGroupsImport: { data: Array<TransactionImport> | null } =
+  const allTransactionImport: { data: Array<TransactionImport> | null } =
     await supabase
       .from(DbTables.TRANSACTION_IMPORT)
       .select()
       .eq("owner_id", session?.user.id);
-  return json({ allGroupsImport: allGroupsImport });
+  return json({ allTransactionImport: allTransactionImport });
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const response = new Response();
+  const supabase = createSupabaseServerClient({ request, response });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const userId = session?.user.id;
+
+  if (!userId) {
+    return redirect("/");
+  }
+
+  const formData = await request.formData();
+  const formName = formData.get("formName") as string;
+
+  if (formName === "deleteTransactionImport") {
+    const response = new Response();
+    const supabase = createSupabaseServerClient({ request, response });
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user.id) {
+      return redirect("/");
+    }
+    const url = new URL(request.url);
+    const transactionImportId = url.searchParams.get("transactionImport");
+
+    await supabase
+      .from(DbTables.TRANSACTION)
+      .delete()
+      .match({
+        owner_id: session?.user.id,
+        transactionId: transactionImportId,
+      });
+    await supabase
+      .from(DbTables.TRANSACTION_IMPORT)
+      .delete()
+      .match({
+        owner_id: session?.user.id,
+        id: transactionImportId,
+      });
+  }
   return json({});
 };
 
 export default function Upload() {
   const outletContext = useOutletContext<OutletContext>();
-  const { allGroupsImport } = useLoaderData<typeof loader>();
+  const { allTransactionImport } = useLoaderData<typeof loader>();
 
   return (
     <div className="">
       <CsvUpload
         outletContext={outletContext}
-        allGroupsImport={allGroupsImport.data}
+        allTransactionImport={allTransactionImport.data}
       />
     </div>
   );
