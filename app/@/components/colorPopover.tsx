@@ -170,7 +170,10 @@ export default function ColorPopover({
       </PopoverTrigger>
       <PopoverContent className="h-[300px] overflow-scroll">
         {colors.map((color) => (
-          <div className="flex p-2 align-center cursor-pointer hover:bg-slate-100 rounded-md">
+          <div
+            key={color}
+            className="flex p-2 align-center cursor-pointer hover:bg-slate-100 rounded-md"
+          >
             <div
               className="w-[20px] h-[20px] rounded-full mr-2 border"
               style={{

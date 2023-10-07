@@ -1,35 +1,9 @@
 import { PostgrestSingleResponse, SupabaseClient } from "@supabase/supabase-js";
-import fs from "fs";
-import readline from "readline";
 import { DbTables } from "~/types/db";
 import { TransactionGroup } from "~/types/models";
 import { getMyGroups, getUserId } from "./db";
 import { BankFormat } from "~/types/bank";
 import { mapBankTransactionsToCommonFormat } from "./transactionMapper";
-
-export async function getCsvAsArray(path: string) {
-  let arr: Array<string> = [];
-
-  await new Promise((resolve, reject) => {
-    try {
-      readline
-        .createInterface({
-          input: fs.createReadStream(path),
-          terminal: true,
-        })
-        .on("line", function (line) {
-          arr.push(line);
-        })
-        .on("close", function () {
-          resolve(arr);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-
-  return arr;
-}
 
 export function getDetectedGroupId(
   allGroups: Array<TransactionGroup>,
@@ -52,10 +26,10 @@ export function getDetectedGroupId(
   return detectedId;
 }
 
-function getDefaultGroupId(
-  allGroups: PostgrestSingleResponse<Array<TransactionGroup>>,
-) {
-  return allGroups.data?.find((item) => item.name === "Other");
+export function getDefaultGroupId(allGroups: Array<TransactionGroup> | null) {
+  if (!allGroups) return null;
+  const defaultGroup = allGroups.find((item) => item.name === "Other");
+  return defaultGroup?.id ? defaultGroup.id : null;
 }
 
 export async function handleUploadedCsv(
@@ -72,8 +46,7 @@ export async function handleUploadedCsv(
 
   const myGroups: Awaited<PostgrestSingleResponse<TransactionGroup[]>> =
     await getMyGroups(supabase, userId);
-  const defaultGroup = getDefaultGroupId(myGroups);
-  const defaultGroupId = defaultGroup?.id ? defaultGroup.id : null;
+  const defaultGroupId = getDefaultGroupId(myGroups?.data);
   const importId = newTransactionImport.data
     ? newTransactionImport.data[0].id
     : null;
