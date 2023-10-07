@@ -17,11 +17,12 @@ export default function TransactionImportsTable({
 }) {
   return (
     <Table className="border rounded-md border-grey-300 mt-4 max-w-xl">
-      <TableCaption>A list of your transaction groups.</TableCaption>
+      <TableCaption>A list of your transaction imports.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Partners</TableHead>
+          <TableHead>ID</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Transactions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -31,9 +32,15 @@ export default function TransactionImportsTable({
               {transactionImport.id}
             </TableCell>
             <TableCell className="font-medium">
+              date
+              {/* {new Date(transactionImport.createdAt).toString()} */}
+            </TableCell>
+            <TableCell className="font-medium">
               {transactionImport.transactions}
             </TableCell>
-            <DeleteTransactionImport transactionImport={transactionImport} />
+            <TableCell className="font-medium">
+              <DeleteTransactionImport transactionImport={transactionImport} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

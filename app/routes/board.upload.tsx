@@ -8,67 +8,49 @@ import { useLoaderData, useOutletContext } from "@remix-run/react";
 import TransactionImportsTable from "~/@/components/transactionImportsTable";
 import { CsvUpload } from "~/@/components/uploadButton";
 import { handleUploadedCsv } from "~/@/lib/csvParser.server";
+import { getUserId } from "~/@/lib/db";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 import { DbTables } from "~/types/db";
 import { OutletContext } from "~/types/main";
 import { TransactionImport } from "~/types/models";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
+  const userId = await getUserId(supabase);
+  if (!userId) return redirect("/");
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const imports: { data: Array<TransactionImport> | null } = await supabase
+    .from(DbTables.TRANSACTION_IMPORT)
+    .select()
+    .eq("owner_id", userId);
 
-  if (!session?.user) {
-    return redirect("/");
-  }
-
-  const allTransactionImport: { data: Array<TransactionImport> | null } =
-    await supabase
-      .from(DbTables.TRANSACTION_IMPORT)
-      .select()
-      .eq("owner_id", session?.user.id);
-
-  // console.log("allTransactionImport");
-  // console.log(allTransactionImport);
-  return json({ allTransactionImport });
+  return json({ imports });
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
+  const userId = await getUserId(supabase);
+  if (!userId) return redirect("/");
+
   const form = await request.formData();
   const rawBody = form.get("body");
   const formName = form.get("formName") as string;
 
   if (formName === "deleteTransactionImport") {
-    const response = new Response();
-    const supabase = createSupabaseServerClient({ request, response });
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session?.user.id) {
-      return redirect("/");
-    }
     const url = new URL(request.url);
     const transactionImportId = url.searchParams.get("transactionImport");
 
-    await supabase
-      .from(DbTables.TRANSACTION)
-      .delete()
-      .match({
-        owner_id: session?.user.id,
-        transactionId: transactionImportId,
-      });
-    await supabase
-      .from(DbTables.TRANSACTION_IMPORT)
-      .delete()
-      .match({
-        owner_id: session?.user.id,
-        id: transactionImportId,
-      });
+    await supabase.from(DbTables.TRANSACTION).delete().match({
+      owner_id: userId,
+      transactionId: transactionImportId,
+    });
+
+    await supabase.from(DbTables.TRANSACTION_IMPORT).delete().match({
+      owner_id: userId,
+      id: transactionImportId,
+    });
   }
 
   if (!rawBody) {
@@ -94,12 +76,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Upload() {
   const outletContext = useOutletContext<OutletContext>();
-  const { allTransactionImport } = useLoaderData<typeof loader>();
+  const { imports } = useLoaderData<typeof loader>();
 
   return (
     <>
       <CsvUpload outletContext={outletContext} />
-      <TransactionImportsTable imports={allTransactionImport.data} />
+      <TransactionImportsTable imports={imports.data} />
     </>
   );
 }
