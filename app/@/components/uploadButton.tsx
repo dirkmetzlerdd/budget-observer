@@ -1,13 +1,30 @@
 import { Label } from "@radix-ui/react-label";
 import { Form } from "@remix-run/react";
-import { Input } from "./ui/input";
-import { extractTransactions } from "../lib/csvParser";
-import { OutletContext } from "~/types/main";
 import { DbTables } from "~/types/db";
-import { TransactionGroup } from "~/types/models";
+import { OutletContext } from "~/types/main";
+import { TransactionGroup, TransactionImport } from "~/types/models";
+import { extractTransactions } from "../lib/csvParser";
 import { switchDayAndMonth } from "../lib/dates";
+import { Input } from "./ui/input";
 
-export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "app/@/components/ui/table";
+import DeleteTransactionImport from "./deleteTransactionImport";
+
+export function CsvUpload({
+  outletContext,
+  allTransactionImport,
+}: {
+  outletContext: OutletContext;
+  allTransactionImport: TransactionImport[] | null;
+}) {
   function getDetectedGroupId(
     allGroups: Array<TransactionGroup>,
     transactionPartner: string,
@@ -44,7 +61,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
         (async function () {
           const newTransactionImport = await outletContext.supabase
             .from(DbTables.TRANSACTION_IMPORT)
-            .insert({})
+            .insert({ owner_id: outletContext?.session?.user.id })
             .select();
 
           const allGroups = await outletContext.supabase
@@ -86,6 +103,16 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
             .from(DbTables.TRANSACTION)
             .insert(transactions)
             .select();
+
+          await outletContext.supabase
+            .from(DbTables.TRANSACTION_IMPORT)
+            .update({ transactions: transactions.length })
+            .match({
+              id: newTransactionImport.data
+                ? newTransactionImport.data[0].id
+                : null,
+            });
+          window.location.reload();
         })();
       }
     };
@@ -102,6 +129,34 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
           Upload
         </Button> */}
       </Form>
+      <div className="border rounded-md border-grey-300 mt-4">
+        <Table>
+          <TableCaption>A list of your transaction groups.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Id</TableHead>
+              <TableHead>Transactions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {allTransactionImport?.map(
+              (transactionImport: TransactionImport) => (
+                <TableRow key={transactionImport.id}>
+                  <TableCell className="font-medium">
+                    {transactionImport.id}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {transactionImport.transactions}
+                  </TableCell>
+                  <DeleteTransactionImport
+                    transactionImport={transactionImport}
+                  />
+                </TableRow>
+              ),
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
