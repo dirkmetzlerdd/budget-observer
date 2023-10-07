@@ -64,5 +64,12 @@ export async function handleUploadedCsv(
     importId,
   );
 
+  await supabase
+    .from(DbTables.TRANSACTION_IMPORT)
+    .update({ transactions: transactions.length })
+    .match({
+      id: importId,
+    });
+
   return transactions;
 }

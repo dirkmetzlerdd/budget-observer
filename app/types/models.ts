@@ -24,4 +24,5 @@ export type TransactionGroup = {
 export type TransactionImport = {
   id: string;
   createdAt: string;
+  transactions: string;
 };

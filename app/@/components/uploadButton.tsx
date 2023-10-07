@@ -1,8 +1,9 @@
 import { Label } from "@radix-ui/react-label";
 import { Form, useSubmit } from "@remix-run/react";
 import { Input } from "./ui/input";
+import { OutletContext } from "~/types/main";
 
-export function CsvUpload() {
+export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
   const submit = useSubmit();
 
   function readCsv(input: React.ChangeEvent<HTMLInputElement>) {
