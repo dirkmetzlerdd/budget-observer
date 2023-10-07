@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { switchDayAndMonth } from "../app/@/lib/dates";
+import { switchDayAndMonth } from "~/@/lib/dates";
 
 test("should switch day and month", async () => {
   const ddmm = "20.12.2000";

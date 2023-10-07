@@ -4,11 +4,13 @@ import {
   json,
   redirect,
 } from "@remix-run/node";
-import { useOutletContext, useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
+import TransactionImportsTable from "~/@/components/transactionImportsTable";
 import { CsvUpload } from "~/@/components/uploadButton";
-import { OutletContext } from "~/types/main";
+import { handleUploadedCsv } from "~/@/lib/csvParser.server";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 import { DbTables } from "~/types/db";
+import { OutletContext } from "~/types/main";
 import { TransactionImport } from "~/types/models";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -28,24 +30,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .from(DbTables.TRANSACTION_IMPORT)
       .select()
       .eq("owner_id", session?.user.id);
-  return json({ allTransactionImport: allTransactionImport });
+
+  // console.log("allTransactionImport");
+  // console.log(allTransactionImport);
+  return json({ allTransactionImport });
 }
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const userId = session?.user.id;
-
-  if (!userId) {
-    return redirect("/");
-  }
-
-  const formData = await request.formData();
-  const formName = formData.get("formName") as string;
+  const form = await request.formData();
+  const rawBody = form.get("body");
+  const formName = form.get("formName") as string;
 
   if (formName === "deleteTransactionImport") {
     const response = new Response();
@@ -74,7 +70,26 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         id: transactionImportId,
       });
   }
-  return json({});
+
+  if (!rawBody) {
+    return json({});
+  }
+
+  if (typeof rawBody !== "string") {
+    throw json("Malformed JSON body: expected string body", { status: 400 });
+  }
+
+  try {
+    const transactions = await handleUploadedCsv(supabase, JSON.parse(rawBody));
+    const { status, data } = await supabase
+      .from(DbTables.TRANSACTION)
+      .insert(transactions)
+      .select();
+
+    return json({ status, data });
+  } catch {
+    throw json("Malformed JSON body: could not parse", { status: 400 });
+  }
 };
 
 export default function Upload() {
@@ -82,11 +97,9 @@ export default function Upload() {
   const { allTransactionImport } = useLoaderData<typeof loader>();
 
   return (
-    <div className="">
-      <CsvUpload
-        outletContext={outletContext}
-        allTransactionImport={allTransactionImport.data}
-      />
-    </div>
+    <>
+      <CsvUpload outletContext={outletContext} />
+      <TransactionImportsTable imports={allTransactionImport.data} />
+    </>
   );
 }
