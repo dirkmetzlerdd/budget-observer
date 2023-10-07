@@ -9,17 +9,14 @@ import { DbTables } from "~/types/db";
 import { useLoaderData } from "@remix-run/react";
 import FromToDatePicker from "~/@/components/fromToDatePciker";
 import ChartSummary from "~/@/components/chartSummary";
+import { getUserId } from "~/@/lib/db";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const response = new Response();
   const supabase = createSupabaseServerClient({ request, response });
+  const userId = await getUserId(supabase);
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session?.user.id) {
-    return redirect("/");
-  }
+  if (!userId) return redirect("/");
 
   const url = new URL(request.url);
   const fromdate = url.searchParams.get("fromdate");
@@ -33,7 +30,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .select("*")
       .lt("date", todate)
       .gt("date", fromdate)
-      .eq("owner_id", session?.user.id);
+      .eq("owner_id", userId);
   }
 
   if (!fromdate && todate) {
@@ -41,7 +38,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .from(DbTables.TRANSACTION)
       .select("*")
       .lt("date", todate)
-      .eq("owner_id", session?.user.id);
+      .eq("owner_id", userId);
   }
 
   if (fromdate && !todate) {
@@ -49,22 +46,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .from(DbTables.TRANSACTION)
       .select("*")
       .gt("date", fromdate)
-      .eq("owner_id", session?.user.id);
+      .eq("owner_id", userId);
   }
 
   if (!fromdate && !todate) {
     transactionData = await supabase
       .from(DbTables.TRANSACTION)
       .select("*")
-      .eq("owner_id", session?.user.id);
+      .eq("owner_id", userId);
   }
-
-  console.log(transactionData);
 
   const groupData: { data: Array<TransactionGroup> | null } = await supabase
     .from(DbTables.TRANSACTION_GROUP)
     .select()
-    .eq("owner_id", session?.user.id);
+    .eq("owner_id", userId);
 
   const expenses = getPieChartData(
     "expenses",
