@@ -37,10 +37,7 @@ export default function TransactionGroupsTable({
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>{group.description}</TableCell>
-              <TableCell
-                align="center"
-                className="w-[50px] cursor-pointer transition-all duration-200 hover:scale-125"
-              >
+              <TableCell align="center" className="w-[50px] ">
                 <ColorPopover
                   currentColor={group.color}
                   currentGroupId={group.id}
