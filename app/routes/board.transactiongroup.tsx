@@ -4,11 +4,12 @@ import {
   json,
   redirect,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import CreateTransactionGroup from "~/@/components/createTransactionGroup";
 import TransactionGroupsTable from "~/@/components/transactionGroupsTable";
 import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 import { DbTables } from "~/types/db";
+import { OutletContext } from "~/types/main";
 import { Transaction, TransactionGroup } from "~/types/models";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -110,12 +111,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 export default function TransactionGroups() {
   const { groups } = useLoaderData<typeof loader>();
+  const outletContext = useOutletContext<OutletContext>();
 
   return (
     <div className="flex flex-col">
       <h1 className="mb-4 text-md font-bold">My Transaction Groups</h1>
       <CreateTransactionGroup />
-      <TransactionGroupsTable groups={groups} />
+      <TransactionGroupsTable groups={groups} outletContext={outletContext} />
     </div>
   );
 }

@@ -11,11 +11,14 @@ import EditTransactionGroup from "./editTransactionGroup";
 import { TransactionGroup } from "~/types/models";
 import DeleteTransactionGroup from "./deleteTransactionGroup";
 import ColorPopover from "./colorPopover";
+import { OutletContext } from "~/types/main";
 
 export default function TransactionGroupsTable({
   groups,
+  outletContext,
 }: {
   groups: Array<TransactionGroup>;
+  outletContext: OutletContext;
 }) {
   return (
     <div className="border rounded-md border-grey-300 mt-4">
@@ -34,11 +37,12 @@ export default function TransactionGroupsTable({
             <TableRow key={group.id}>
               <TableCell className="font-medium">{group.name}</TableCell>
               <TableCell>{group.description}</TableCell>
-              <TableCell
-                align="center"
-                className="w-[50px] cursor-pointer transition-all duration-200 hover:scale-125"
-              >
-                <ColorPopover currentColor={group.color} />
+              <TableCell align="center" className="w-[50px] ">
+                <ColorPopover
+                  currentColor={group.color}
+                  currentGroupId={group.id}
+                  outletContext={outletContext}
+                />
               </TableCell>
               <TableCell>{group.partners.join(", ")}</TableCell>
               <TableCell className="flex gap-4">

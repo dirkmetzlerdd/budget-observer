@@ -3,6 +3,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "app/@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { OutletContext } from "~/types/main";
+import { DbTables } from "~/types/db";
 
 const colors = [
   "aliceblue",
@@ -154,36 +165,44 @@ const colors = [
 
 export default function ColorPopover({
   currentColor,
+  currentGroupId,
+  outletContext,
 }: {
   currentColor: string;
+  currentGroupId: string;
+  outletContext: OutletContext;
 }) {
+  const update = (value: string) => {
+    (async function () {
+      await outletContext.supabase
+        .from(DbTables.TRANSACTION_GROUP)
+        .update({ color: value })
+        .eq("id", currentGroupId);
+    })();
+  };
   return (
-    <Popover>
-      <PopoverTrigger>
-        {" "}
-        <div
-          className="w-[20px] h-[20px] rounded-full border"
-          style={{
-            backgroundColor: currentColor,
-          }}
-        ></div>
-      </PopoverTrigger>
-      <PopoverContent className="h-[300px] overflow-scroll">
-        {colors.map((color) => (
-          <div
-            key={color}
-            className="flex p-2 align-center cursor-pointer hover:bg-slate-100 rounded-md"
-          >
-            <div
-              className="w-[20px] h-[20px] rounded-full mr-2 border"
-              style={{
-                backgroundColor: color,
-              }}
-            ></div>
-            <div className=" align-middle">{color}</div>
-          </div>
-        ))}
-      </PopoverContent>
-    </Popover>
+    <Select onValueChange={update} defaultValue={currentColor}>
+      <SelectTrigger className="w-[180px] ">
+        <SelectValue placeholder="Select a color" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup className="h-[300px] overflow-y-scroll ">
+          <SelectLabel>Colors</SelectLabel>
+          {colors.map((color) => (
+            <SelectItem key={color} value={color} className="flex flex-row ">
+              <div className="flex p-2 align-center cursor-pointer hover:bg-slate-100 rounded-md">
+                <div
+                  className="w-[20px] h-[20px] rounded-full mr-2 border cursor-pointer transition-all duration-200 hover:scale-125"
+                  style={{
+                    backgroundColor: color,
+                  }}
+                ></div>
+                {color}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }
