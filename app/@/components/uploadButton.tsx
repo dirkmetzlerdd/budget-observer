@@ -34,6 +34,7 @@ export function CsvUpload({ outletContext }: { outletContext: OutletContext }) {
 
   return (
     <div className="bg-sltae-300">
+      <h1 className="mb-4 text-md font-bold">Upload Transactions</h1>
       <Form method="post" encType="multipart/form-data">
         <div className="max-w-md">
           <Label htmlFor="budgetFile">File:</Label>

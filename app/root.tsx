@@ -19,6 +19,7 @@ import { createSupabaseServerClient } from "./@/lib/supabase.server";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@supabase/auth-helpers-remix";
 import MainHeader from "./@/components/mainHeader";
+import MainFooter from "./@/components/mainFooter";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -67,15 +68,16 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen p-0 m-0 ">
+      <body className="flex flex-col h-screen p-0 m-0 ">
         <MainHeader
           // @ts-ignore
           session={session}
           signOut={() => supabase.auth.signOut()}
         />
-        <div className="min-h-full">
+        <div className="flex flex-grow">
           <Outlet context={{ supabase, session }} />
         </div>
+        <MainFooter />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
