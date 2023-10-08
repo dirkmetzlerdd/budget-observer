@@ -28,6 +28,15 @@ export function DatePicker({ title }: { title: string }) {
     }
   }, [date]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    const dateFromUrl = params.get(`${title.toLowerCase()}date`);
+
+    if (dateFromUrl) {
+      setDate(new Date(dateFromUrl));
+    }
+  }, []);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
