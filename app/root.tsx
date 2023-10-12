@@ -68,13 +68,13 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col h-screen p-0 m-0 ">
+      <body className="flex flex-col min-h-screen p-0 m-0 ">
         <MainHeader
           // @ts-ignore
           session={session}
           signOut={() => supabase.auth.signOut()}
         />
-        <div className="flex flex-grow">
+        <div className="min-h-screen">
           <Outlet context={{ supabase, session }} />
         </div>
         <MainFooter />
@@ -84,4 +84,9 @@ export default function App() {
       </body>
     </html>
   );
+}
+{
+  /* <body className="flex flex-col  min-h-screen max-h-full p-0 m-0 ">
+
+<div className="min-h-screen"></div> */
 }

@@ -46,7 +46,7 @@ export function SideMenu({
   supabase: SupabaseClient;
 }) {
   return (
-    <div className="flex flex-col w-[200px] bg-slate-50 pt-10 border-r border-slate-200">
+    <div className="flex flex-col w-[200px] bg-slate-50 pt-10 border-r border-slate-200 min-h-screen">
       {navItems.map((item) => (
         <NavLink
           key={item.label}
