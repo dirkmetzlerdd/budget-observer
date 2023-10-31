@@ -7,8 +7,7 @@ import { createSupabaseServerClient } from "~/@/lib/supabase.server";
 import { DbTables } from "~/types/db";
 import { OutletContext } from "~/types/main";
 import { Transaction, TransactionGroup } from "~/types/models";
-import { XSquare } from "lucide-react";
-import { Button } from "app/@/components/ui/button";
+import { X } from "lucide-react";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const response = new Response();
@@ -47,7 +46,8 @@ export default function Transactions() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex w-full max-w-sm items-center space-x-2">
+      <h1 className="mb-4 text-md font-bold">Transactions</h1>
+      <div className="flex w-full max-w-sm items-center space-x-2 mb-2">
         <Input
           className="max-w-[250px]"
           type="text"
@@ -58,16 +58,14 @@ export default function Transactions() {
             setSearch(e.target.value);
           }}
         />
-        <Button
-          className="bg-white border-2 hover:bg-slate-200  cursor-pointer transition ease-in-out duration-150"
-          onClick={() => setSearch("")}
-        >
-          {" "}
-          <XSquare color="#000000" />
-        </Button>
+        {search && (
+          <X
+            className="text-slate-400 hover:text-slate-600 cursor-pointer"
+            onClick={() => setSearch("")}
+          />
+        )}
       </div>
 
-      <h1 className="mb-4 text-md font-bold">Transactions</h1>
       <TransactionsTable
         transactions={transactions.filter(
           (item: any) =>

@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "app/@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, XSquare } from "lucide-react";
 import { useState } from "react";
 
 export default function CreateTransactionGroup() {
@@ -39,6 +39,8 @@ export default function CreateTransactionGroup() {
             <div className="flex flex-col gap-3">
               <Label htmlFor="description">Description</Label>
               <Input type="text" name="description" placeholder="Description" />
+
+              <XSquare />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="partners">Partners</Label>
